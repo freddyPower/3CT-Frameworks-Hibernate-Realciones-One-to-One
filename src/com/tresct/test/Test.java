@@ -15,14 +15,17 @@ import com.tresct.dto.Avaluo;
 import com.tresct.dto.Tramite;
 import com.tresct.util.HibernateUtil;
 
+//Esta clase demeustra como realizar operaciones crud en relaciones one to one
 public class Test {
 
 	public static void main(String[] args) {
 		
 //		Avaluo a = new Avaluo("Itzacalco");
 //		insertaAvaluo(a);
+		//actualizaAvaluo();
+		//consultaOneToOne();
+		eliminaAvaluo();
 		
-		consultaOneToOne();
 	}
 	
 	
@@ -79,7 +82,6 @@ public class Test {
 			System.out.println("ListaAvaluos: "  + listaAvaluos.toString());
 			
 			
-			
 		}catch( HibernateException hbe) {			
 			System.out.println("Excepcion en consultaOneToOne: " + hbe.getMessage());
 			sesion.getTransaction().rollback();
@@ -90,5 +92,45 @@ public class Test {
 		return listaAvaluos.toString();		
 	}
 	
-
+	
+	public static void actualizaAvaluo() {
+		
+		Session sesion =  null;
+		try {
+			sesion = HibernateUtil.getSessionFactory().openSession();
+			sesion.beginTransaction();
+			
+			Avaluo a = sesion.load(Avaluo.class, 2);
+			a.setLugarAvaluo("2da cda de joya de nieves CDMX 2");
+			sesion.update(a);
+			sesion.getTransaction().commit();
+						
+		}catch( HibernateException hbe ) {
+			System.out.println("HibernateException : " + hbe.getMessage());
+			sesion.getTransaction().rollback();
+			sesion.close();			
+		}finally {
+			sesion.close();			
+		}	
+	}
+	
+	public static void eliminaAvaluo() {
+		Session sesion = null;
+		try {
+			sesion = HibernateUtil.getSessionFactory().openSession();
+			sesion.beginTransaction();
+			
+			Avaluo a = sesion.load(Avaluo.class, 2);
+			sesion.delete(a);
+			sesion.getTransaction().commit();
+			
+		}catch( HibernateException hbe ) {
+			System.out.println("HibernateException: " + hbe.getMessage());
+			sesion.getTransaction().rollback();
+			sesion.close();
+			
+		}finally {
+			sesion.close();			
+		}
+	}	
 }
