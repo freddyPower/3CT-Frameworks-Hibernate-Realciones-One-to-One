@@ -20,11 +20,21 @@ public class Test {
 
 	public static void main(String[] args) {
 		
-//		Avaluo a = new Avaluo("Itzacalco");
-//		insertaAvaluo(a);
+		//Avaluo a = new Avaluo("Itzacalco");
+		//insertaAvaluo(a);
 		//actualizaAvaluo();
 		//consultaOneToOne();
-		eliminaAvaluo();
+		try {
+			
+			eliminaAvaluo();
+			
+		}catch( Exception hbe ) {
+			
+			System.out.println("HibernateeXCEPTION: " + hbe.getMessage());
+			
+		}
+		
+		//eliminaTramiteCascada();
 		
 	}
 	
@@ -38,7 +48,7 @@ public class Test {
 			sesion = HibernateUtil.getSessionFactory().openSession();
 			sesion.beginTransaction();
 			
-			Tramite t = sesion.load(Tramite.class, 7);			
+			Tramite t = sesion.load(Tramite.class, 2);			
 			System.out.println("El tramite cargado es: " + t.toString());
 			a.setTramite(t);
 			sesion.save(a);
@@ -120,7 +130,7 @@ public class Test {
 			sesion = HibernateUtil.getSessionFactory().openSession();
 			sesion.beginTransaction();
 			
-			Avaluo a = sesion.load(Avaluo.class, 2);
+			Avaluo a = sesion.load(Avaluo.class, 3);
 			sesion.delete(a);
 			sesion.getTransaction().commit();
 			
@@ -132,5 +142,27 @@ public class Test {
 		}finally {
 			sesion.close();			
 		}
-	}	
+	}
+	
+	//Eliminacion en cascada
+	public static void eliminaTramiteCascada() {
+		Session sesion = null;
+		try {
+			sesion = HibernateUtil.getSessionFactory().openSession();
+			sesion.beginTransaction();
+			Tramite t = sesion.load(Tramite.class, 2);
+			
+			sesion.delete(t);
+			sesion.getTransaction().commit();
+			
+		}catch( HibernateException hbe ) {
+			System.out.println("HibernateException: " + hbe.getMessage());
+			sesion.getTransaction().rollback();
+			sesion.close();
+			
+		}finally {
+			sesion.close();			
+		}
+	}
+	
 }

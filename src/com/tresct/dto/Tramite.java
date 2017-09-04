@@ -2,12 +2,15 @@ package com.tresct.dto;
 
 import java.sql.Timestamp;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
+
+import org.hibernate.annotations.Cascade;
 
 @Entity
 @Table(name="Tramite")
@@ -20,7 +23,7 @@ public class Tramite {
 	private Timestamp fechaTramite;
 	
 	//Crear la relacón @OneToOne
-	@OneToOne( mappedBy="tramite" )
+	@OneToOne( mappedBy="tramite"  , cascade = CascadeType.REMOVE)
 	private Avaluo avaluo;
 	
 	public Tramite() {
